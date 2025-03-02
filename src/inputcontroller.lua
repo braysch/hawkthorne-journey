@@ -6,7 +6,7 @@ local db = store('controls-1')
 local InputController = {}
 InputController.__index = InputController
 
-local DEFAULT_PRESET = 'gamepad'
+local DEFAULT_PRESET = 'actionmap'
 local DEFAULT_ACTIONMAP = {
   actionmap = {
     UP = 'up',
@@ -167,6 +167,11 @@ function InputController:isDown( action )
   if key == nil then
     return false
   end
+
+  if key == "dpleft" then key = "left" end
+  if key == "dpright" then key = "right" end
+  if key == "dpup" then key = "up" end
+  if key == "dpdown" then key = "down" end
 
   if self.joystick then
     axisDir1, axisDir2, _ = self.joystick:getAxes()

@@ -390,7 +390,7 @@ function Player:update(dt, map)
   local crouching = controls:isDown( 'DOWN' ) and not self.controlState:is('ignoreMovement')
   local gazing = controls:isDown( 'UP' ) and not self.controlState:is('ignoreMovement')
   local movingLeft = controls:isDown( 'LEFT' ) and not self.controlState:is('ignoreMovement')
-  local movingRight = true --controls:isDown( 'RIGHT' ) and not self.controlState:is('ignoreMovement')
+  local movingRight = controls:isDown( 'RIGHT' ) and not self.controlState:is('ignoreMovement')
 
   if not self.invulnerable and not self.potion then
     self:stopBlink()
