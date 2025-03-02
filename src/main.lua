@@ -251,13 +251,23 @@ function love.joystickpressed(joystick, key)
 end
 
 function love.joystickaxis(joystick, axis, value)
-  if joystick:isGamepad() then return end
   axisDir1, axisDir2, _ = joystick:getAxes()
-  controls:switch(joystick)
-  if axisDir1 < 0 then buttonpressed('dpleft') end
-  if axisDir1 > 0 then buttonpressed('dpright') end
-  if axisDir2 < 0 then buttonpressed('dpup') end
-  if axisDir2 > 0 then buttonpressed('dpdown') end
+  if joystick:isGamepad() then
+    if axis == 1 then
+      if value < -0.5 then buttonpressed('dpleft')
+      elseif value > 0.5 then buttonpressed('dpright') end
+    end
+    if axis == 2 then
+      if value < -0.5 then buttonpressed('dpup')
+      elseif value > 0.5 then buttonpressed('dpdown') end
+    end
+  else
+    controls:switch(joystick)
+    if axisDir1 < 0 then buttonpressed('dpleft') end
+    if axisDir1 > 0 then buttonpressed('dpright') end
+    if axisDir2 < 0 then buttonpressed('dpup') end
+    if axisDir2 > 0 then buttonpressed('dpdown') end
+  end
 end
 
 function love.draw()
