@@ -36,6 +36,10 @@ function love.load(arg)
   local options = require 'options'
   options:init()
 
+  snesButtonMap = {
+    B = 17
+  }
+
   cli:add_option("--console", "Displays print info")
   cli:add_option("--fused", "Passed in when the app is running in fused mode")
   cli:add_option("--reset-saves", "Resets all the saves")
@@ -165,6 +169,14 @@ function love.load(arg)
 end
 
 function love.update(dt)
+    -- in the case of a SNES controller
+    local joysticks = love.joystick.getJoysticks()
+    local joystick = joysticks[1]
+  
+    if joystick:isDown(3) then buttonpressed('b') end
+    if joystick:isDown(9) then buttonpressed('select') end
+    if joystick:isDown(10) then buttonpressed('start') end
+
   if paused or testing then return end
   if debugger.on then debugger:update(dt) end
   dt = math.min(0.033333333, dt)
@@ -200,6 +212,7 @@ function buttonreleased(key)
 end
 
 function buttonpressed(key)
+  print(key)
   if testing then return end
   if controls:isRemapping() then Gamestate.keypressed(key) return end
   if key == "f5" then debugger:toggle() end
