@@ -168,14 +168,38 @@ function love.load(arg)
 
 end
 
+local joysticks = love.joystick.getJoysticks()
+local joystick = joysticks[1]
+
+-- Mapping of button indexes to their names
+local buttonMapping = {
+    [1] = 'x',
+    [2] = 'a',
+    [3] = 'b',
+    [4] = 'y',
+    [9] = 'select',
+    [10] = 'start'
+}
+
+-- Track the previous state of each button
+local buttonStates = {}
+
+function checkJoystickButtons()
+  for button, name in pairs(buttonMapping) do
+      local isDown = joystick:isDown(button)
+      
+      if isDown and not buttonStates[button] then
+          buttonStates[button] = true 
+          buttonpressed(name)
+      elseif not isDown and buttonStates[button] then
+          buttonStates[button] = false
+      end
+  end
+end
+
 function love.update(dt)
     -- in the case of a SNES controller
-    local joysticks = love.joystick.getJoysticks()
-    local joystick = joysticks[1]
-  
-    if joystick:isDown(3) then buttonpressed('b') end
-    if joystick:isDown(9) then buttonpressed('select') end
-    if joystick:isDown(10) then buttonpressed('start') end
+    checkJoystickButtons()
 
   if paused or testing then return end
   if debugger.on then debugger:update(dt) end
@@ -245,7 +269,7 @@ end
 
 function love.gamepadpressed(joystick, key)
   controls:switch(joystick)
-  buttonpressed(key)
+  --buttonpressed(key)
 end
 
 function love.joystickremoved(joystick)
